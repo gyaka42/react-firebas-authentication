@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from "firebase/auth"
 import toast from "react-hot-toast";
+import store from "./store";
+import { login as loginHandle, logout as logoutHandle } from "./store/auth";
 
 
 const firebaseConfig = {
@@ -14,7 +16,7 @@ const firebaseConfig = {
 
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth()
+export const auth = getAuth()
 
 export const register = async (email, password) => {
     try {
@@ -42,5 +44,32 @@ export const login = async(email, password) => {
       console.log(error.message);
     }
   }
+
+  export const update =async data =>{
+    try{
+        await updateProfile(auth.currentUser, data)
+        toast.success("Profil Guncellendi")
+        return true
+    } catch (error) {
+        toast.error(error.message)
+    }
+  }
+  
+  export const emailVerification = async () => {
+    try {
+        await sendEmailVerification(auth.currentUser)
+        toast.success(`Dogrulama maili ${auth.currentUser.email} adresine gonderildi, lutfen kontrol ediniz !`)
+        return true
+    } catch (error) {
+        toast.error(error.message)
+    }
+  }
+  onAuthStateChanged(auth, (user)=>{
+    if(user) {
+        store.dispatch(loginHandle(user))
+    } else {
+        store.dispatch(logoutHandle())
+    }
+  })
 
 export default app

@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { login } from "../firebase";
-import { login as loginHandle } from "../store/auth";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const navigate=useNavigate()
-    const dispatch=useDispatch()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -14,7 +11,6 @@ export default function Login() {
         e.preventDefault()
         const user = await login(email, password)
         if (user) {
-            dispatch(loginHandle(user))
         navigate("/", {
             replace: true
         })

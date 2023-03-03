@@ -25,7 +25,7 @@ export default function Home(){
     if (user){
         return(
             <div className="max-w-xl mx-auto py-5">
-                <h1 className="flex gap-x-4 items-center">Oturum Acildi {user.displayName}
+                <h1 className="flex gap-x-4 items-center"> {user.photoURL && <img src={user.photoURL} className="w-10 h-10 rounded-full" />} Oturum Acildi {user.displayName}
                 <button onClick={handleLogout} className="h-8 rounded px-4 text-sm text-white bg-indigo-700">Cikis yap</button>
                 {!user.emailVerified &&
                 <button onClick={handleVerification} className="h-8 rounded px-4 text-sm text-white bg-indigo-700">Email Onayla</button>}

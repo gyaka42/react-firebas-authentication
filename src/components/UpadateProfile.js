@@ -8,12 +8,13 @@ export default function UpdateProfile() {
     const dispath=useDispatch()
     const {user} = useSelector(state => state.auth)
     const [displayName, setDisplayName] = useState(user.displayName || "")
-    const [avatar, setAvatar] = useState("")
+    const [avatar, setAvatar] = useState(user.photoURL || "")
 
     const handleSubmit = async e =>{
         e.preventDefault()
         await update ({
-            displayName
+            displayName,
+            photoURL: avatar
         })
         dispath(login(auth.currentUser))
     }
@@ -27,6 +28,13 @@ export default function UpdateProfile() {
                 </label>
                 <div className="mt-1">
                     <input type="text" className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="John Doe" value={displayName} onChange={e => setDisplayName(e.target.value)} />                </div>
+            </div>
+            <div>
+                <label className="block text-sm font-medium text-gray-700">
+                    Fotograf
+                </label>
+                <div className="mt-1">
+                    <input type="text" className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="John Doe" value={avatar} onChange={e => setAvatar(e.target.value)} />                </div>
             </div>
             <div>
             <button className="disabled:opacity-20 cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit"> Guncelle </button>

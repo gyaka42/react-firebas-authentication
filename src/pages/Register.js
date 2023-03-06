@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import { register } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Register() {
-    
+    const navigate=useNavigate()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         const user = await register(email, password)
+        setEmail("")
+        setPassword("")
+        navigate("/login")
+        
+        
     }
     return (
         <form className="max-w-xl mx-auto grid gap-y-4 py-4" onSubmit={handleSubmit}>

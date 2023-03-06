@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import UpdateProfile from "../components/UpadateProfile"
-import { logout, emailVerification } from "../firebase"
+import { logout, auth, emailVerification } from "../firebase"
 import { logout as logoutHandle } from "../store/auth"
 
 export default function Home(){
@@ -13,7 +13,7 @@ export default function Home(){
     const handleLogout = async () => {
         await logout()
         dispatch(logoutHandle())
-        navigate("/login", {
+        navigate("/", {
             replace: true
         })
     }
@@ -25,7 +25,7 @@ export default function Home(){
     if (user){
         return(
             <div className="max-w-xl mx-auto py-5">
-                <h1 className="flex gap-x-4 items-center"> {user.photoURL && <img src={user.photoURL} className="w-10 h-10 rounded-full" />} Oturum Acildi {user.displayName}
+                <h1 className="flex gap-x-4 items-center"> {auth.currentUser.photoURL && <img src={auth.currentUser.photoURL} className="w-10 h-10 rounded-full" />} Oturum Acildi {user.displayName}
                 <button onClick={handleLogout} className="h-8 rounded px-4 text-sm text-white bg-indigo-700">Cikis yap</button>
                 {!user.emailVerified &&
                 <button onClick={handleVerification} className="h-8 rounded px-4 text-sm text-white bg-indigo-700">Email Onayla</button>}
@@ -37,8 +37,14 @@ export default function Home(){
     }
     return(
         <div>
+            <div className="flex justify-evenly max-w-xl m-auto pt-80">
+            <div className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             <Link to="/register">Kayit ol</Link>
+            </div>
+            <div className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             <Link to="/login">Giris yap</Link>
+            </div>
+            </div>
         </div>
     )
 }

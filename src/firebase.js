@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, updatePassword, onAuthStateChanged, signOut, sendEmailVerification } from "firebase/auth"
 import toast from "react-hot-toast";
 import store from "./store";
 import { login as loginHandle, logout as logoutHandle } from "./store/auth";
@@ -54,6 +54,17 @@ export const login = async(email, password) => {
         toast.error(error.message)
     }
   }
+
+  
+  export const resetPassword =async password =>{
+    try{
+        await updatePassword(auth.currentUser, password)
+        toast.success("Parolaniz Guncellendi")
+        return true
+    } catch (error) {
+        toast.error(error.message)
+    }
+  }
   
   export const emailVerification = async () => {
     try {
@@ -66,7 +77,13 @@ export const login = async(email, password) => {
   }
   onAuthStateChanged(auth, (user)=>{
     if(user) {
-        store.dispatch(loginHandle(user))
+        store.dispatch(loginHandle({
+          displayName: user.displayName,
+          email: user.email,
+          emailVerified: user.emailVerified,
+          photoURL: user.photoURL,
+          uid: user.uid,
+        }))
     } else {
         store.dispatch(logoutHandle())
     }
